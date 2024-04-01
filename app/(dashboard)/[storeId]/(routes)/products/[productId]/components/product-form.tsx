@@ -33,11 +33,13 @@ import {
 } from "@/components/ui/select";
 import ImageUpload from "@/components/ui/image-upload";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   name: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
+  description: z.string().min(1),
   categoryId: z.string().min(1),
   colorId: z.string().min(1),
   sizeId: z.string().min(1),
@@ -71,7 +73,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit product" : "Create product";
-  const description = initialData ? "Edit a product." : "Add a new product";
+  const descriptionHeading = initialData
+    ? "Edit a product."
+    : "Add a new product";
   const toastMessage = initialData ? "Product updated." : "Product created.";
   const action = initialData ? "Save changes" : "Create";
 
@@ -84,6 +88,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         name: "",
         images: [],
         price: 0,
+        description: "",
         categoryId: "",
         colorId: "",
         sizeId: "",
@@ -141,7 +146,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
+        <Heading title={title} description={descriptionHeading} />
         {initialData && (
           <Button
             disabled={loading}
@@ -354,6 +359,23 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       This product will not appear anywhere in the store.
                     </FormDescription>
                   </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      disabled={loading}
+                      placeholder="Product description"
+                      {...field}
+                    ></Textarea>
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
